@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it" class="overscroll-none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gaia — poesie, cartoline e noi</title>
+    <meta name="description" content="Le poesie, le cartoline e le foto di Lorenzo e Gaia, in una galleria da sfogliare." />
+    <link rel="canonical" href="https://gaialover.com/" />
+    <meta name="theme-color" content="#f1ede7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gaialover.com/" />
+    <meta property="og:title" content="Gaia — poesie, cartoline e noi" />
+    <meta property="og:description" content="Le poesie, le cartoline e le foto di Lorenzo e Gaia, in una galleria da sfogliare." />
+    <meta property="og:image" content="https://gaialover.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://gaialover.com/og.jpg" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cpath fill=%22%23281f03%22 d=%22M16 28S3 20 3 11a6.5 6.5 0 0 1 13-1 6.5 6.5 0 0 1 13 1c0 9-13 17-13 17z%22/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;700&family=IBM+Plex+Mono&family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main>
+      <div id="stage"></div>
+
+      <header id="header">
+        <button id="logo" class="logo">GAIA.</button>
+        <button id="about-btn" class="about-link">About</button>
+      </header>
+      <div id="fade-bottom" class="fade-bottom"></div>
+
+      <!-- filter -->
+      <button id="filter-btn" class="filter-btn" aria-label="Collezioni">
+        <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M5 10h13M24 10h3M5 22h3M14 22h13" /><circle cx="21" cy="10" r="3" /><circle cx="11" cy="22" r="3" />
+        </svg>
+        <span id="filter-dot" class="filter-dot" hidden></span>
+      </button>
+      <div id="filter-panel" class="filter-panel" hidden>
+        <p class="filter-title">Scopri le collezioni</p>
+        <div id="chips" class="chips"></div>
+      </div>
+
+      <!-- focused card overlay (DOM card that replaces the WebGL mesh) -->
+      <div id="overlay" class="overlay" hidden>
+        <div class="flipper" id="flipper">
+          <div class="overlay-shadow" id="overlay-shadow"></div>
+          <div class="face front"><img id="front-img" alt="" /></div>
+          <div class="face back" id="back"></div>
+        </div>
+      </div>
+      <div id="tutorial" class="tutorial" hidden>
+        <svg viewBox="0 0 40 40" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 21V9.5a2 2 0 0 1 4 0V19m0-2.5a2 2 0 0 1 4 0V19m0-1.5a2 2 0 0 1 4 0V20m0-1a2 2 0 0 1 4 0v5c0 6-4 10-9 10h-1c-3.5 0-5.5-1.6-7.5-4.5L8.6 24a2 2 0 0 1 3.2-2.4L15 25" />
+          <path d="M6 6l-3 3 3 3M3 9h8M34 6l3 3-3 3M37 9h-8" />
+        </svg>
+        <span id="tutorial-text">Gira la carta</span>
+      </div>
+      <nav id="menu" class="menu" hidden>
+        <button id="close-btn" class="menu-btn" aria-label="Torna alla griglia">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </button>
+        <span id="pager" class="pager" hidden>
+          <button id="prev-btn" class="menu-btn" aria-label="Pagina precedente">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <span id="page-num" class="menu-btn page-num">1/2</span>
+          <button id="next-btn" class="menu-btn" aria-label="Pagina successiva">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </span>
+        <button id="flip-btn" class="menu-btn" aria-label="Gira">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/></svg>
+        </button>
+      </nav>
+
+      <!-- about -->
+      <div id="about" class="about" hidden>
+        <div class="about-backdrop" id="about-backdrop"></div>
+        <aside class="about-panel">
+          <button id="about-close" class="about-close" aria-label="Chiudi">✕</button>
+          <h2>Per te, Gaia.</h2>
+          <p>Qui dentro ci sono le poesie che ti ho scritto, le cartoline che ti ho mandato e le foto di noi due.</p>
+          <p>Trascina per esplorare, clicca una carta per guardarla da vicino e girala per vedere il retro.</p>
+        </aside>
+      </div>
+
+      <!-- loader -->
+      <div id="loader" class="loader">
+        <div class="loader-logo">GAIA.</div>
+        <p class="loader-tag">Poesie, cartoline e noi</p>
+        <p class="loader-loading">Loading<span>.</span><span>.</span><span>.</span></p>
+      </div>
+      <div id="spin-cursor" class="spin-cursor">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2a10 10 0 1 0 10 10h-2.5A7.5 7.5 0 1 1 12 4.5z" /></svg>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
