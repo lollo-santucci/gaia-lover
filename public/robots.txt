@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gaialover.com/sitemap.xml
+Sitemap: https://www.gaialover.com/sitemap.xml
